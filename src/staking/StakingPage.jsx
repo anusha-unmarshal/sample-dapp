@@ -1,9 +1,6 @@
 import Wallet from "../Wallet/Wallet";
 import { Container, Paper, Stack, Typography } from "@mui/material";
-import useStakerDetails, {
-  RewardInfoReader,
-  StakerInfoReader,
-} from "./StakerDetails";
+import useStakerDetails, { StakerInfoReader } from "./StakerDetails";
 import { useConnector } from "../Wallet/Connector";
 import { useEffect } from "react";
 import StakeCards from "./StakeCards";
@@ -12,20 +9,20 @@ import ApproveCard from "./ApproveCard";
 import { formatBigNumber } from "./Converters";
 
 const StakingPage = () => {
-  const { getTokenBalance, getStakerInfo, getClaimableTokens } =
+  const { getTokenBalance, getStakerInfo, getClaimableTokens, getAllowance } =
     useStakerDetails();
-  const { walletAddress } = useConnector();
+  const { walletAddress, isActive } = useConnector();
   const stakerInfo = StakerInfoReader();
-  const rewardsInfo = RewardInfoReader();
   const { hasAllowance } = useAllowancesReader();
 
-  console.log(rewardsInfo);
-  console.log();
   useEffect(() => {
-    getTokenBalance();
-    getStakerInfo();
-    getClaimableTokens();
-  }, [walletAddress]);
+    if (isActive) {
+      getTokenBalance();
+      getStakerInfo();
+      getAllowance();
+      getClaimableTokens();
+    }
+  }, [isActive, walletAddress]);
 
   return (
     <>
@@ -48,13 +45,14 @@ const StakingPage = () => {
             <Stack direction={"column"} justifyContent={"flex-end"}>
               <Wallet />
               <Typography textAlign={"right"}>
-                Bal: {formatBigNumber(stakerInfo.balance)}
+                Bal: {formatBigNumber(stakerInfo.balance, 8)}
               </Typography>
             </Stack>
           </Stack>
         </Container>
       </Paper>
       {!hasAllowance ? <ApproveCard /> : <StakeCards />}
+      {/*<StakeHistory />*/}
     </>
   );
 };

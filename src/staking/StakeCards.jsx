@@ -65,11 +65,36 @@ const Unstake = () => {
   );
 };
 
-const StakeCards = () => {
-  const stakerInfo = StakerInfoReader();
+const Claim = () => {
   const loadingIndicator = useLoadingIndicatorReader();
   const rewardsInfo = RewardInfoReader();
   const { claim } = useStakerDetails();
+  return (
+    <>
+      <Typography textAlign={"center"} fontWeight={600}>
+        Claim Rewards
+      </Typography>
+      <br />
+      <Typography textAlign={"center"}>
+        Total earned: {formatBigNumber(rewardsInfo.earnedTokens, 8)}
+      </Typography>
+      <Typography textAlign={"center"}>
+        Claimable: {formatBigNumber(rewardsInfo.claimableTokens, 8)}
+      </Typography>
+      <br />
+      <LoadingButton
+        variant={"outlined"}
+        fullWidth
+        onClick={claim}
+        loading={loadingIndicator.isClaimingRewards}
+      >
+        Claim and Withdraw
+      </LoadingButton>
+    </>
+  );
+};
+const StakeCards = () => {
+  const stakerInfo = StakerInfoReader();
   return (
     <Container maxWidth={"lg"} sx={{ padding: 0 }}>
       <Stack direction={"row"} justifyContent={"space-evenly"} sx={{ mt: 5 }}>
@@ -84,21 +109,7 @@ const StakeCards = () => {
         </Card>
         <Card sx={{ width: "40%" }}>
           <CardContent>
-            <Typography textAlign={"center"} fontWeight={600}>
-              Claim Rewards
-            </Typography>
-            <Typography>
-              Rewards Claimable:{" "}
-              {formatBigNumber(rewardsInfo.claimableTokens, 4)}
-            </Typography>
-            <LoadingButton
-              variant={"outlined"}
-              fullWidth
-              onClick={claim}
-              loading={loadingIndicator.isClaimingRewards}
-            >
-              Claim and Withdraw
-            </LoadingButton>
+            <Claim />
           </CardContent>
         </Card>
       </Stack>

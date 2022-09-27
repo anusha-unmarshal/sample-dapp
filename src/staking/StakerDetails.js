@@ -29,6 +29,7 @@ const rewardsState = atom({
   key: "Claimable_rewards",
   default: {
     claimableTokens: new BigNumber(0),
+    earnedTokens: new BigNumber(0),
   },
 });
 
@@ -69,8 +70,7 @@ const useStakerDetails = () => {
         alert("User denied the transaction!");
         return;
       }
-      console.warn(e);
-      alert("Transaction Failed! " + (e.message || e?.message?.error || ""));
+      alert("Transaction Failed!");
     }
   };
 
@@ -86,7 +86,6 @@ const useStakerDetails = () => {
     );
     updateLoadingStatus((state) => ({ ...state, isStaking: false }));
     getStakerInfo();
-    // getStakingDetails();
     getTokenBalance();
   };
 
@@ -118,17 +117,18 @@ const useStakerDetails = () => {
 
   const getClaimableTokens = () => {
     const stakingContract = getStakingContract(getSigner());
-    stakingContract
-      .getClaimableToken(walletAddress)
-      .then(({ claimableTokens }) => {
-        console.log(walletAddress);
-        console.log(claimableTokens);
-        setRewardsInfo((state) => ({
-          ...state,
-          claimableTokens: hexaToBigNumber(claimableTokens, 0),
-        }));
-      })
-      .catch((e) => console.log(e));
+    stakingContract.getClaimableToken(walletAddress).then((claimableTokens) => {
+      setRewardsInfo((state) => ({
+        ...state,
+        claimableTokens: hexaToBigNumber(claimableTokens, 8),
+      }));
+    });
+    stakingContract.getEarnedTokens(walletAddress).then((earnedTokens) => {
+      setRewardsInfo((state) => ({
+        ...state,
+        earnedTokens: hexaToBigNumber(earnedTokens, 8),
+      }));
+    });
   };
 
   const getApproval = async () => {
@@ -184,6 +184,7 @@ const useStakerDetails = () => {
     stake,
     getApproval,
     getStakerInfo,
+    getAllowance,
     unstake,
     getClaimableTokens,
     claim,
