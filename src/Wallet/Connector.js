@@ -1,14 +1,9 @@
 import { useWeb3React } from "@web3-react/core";
-import { ethers } from "ethers";
 import { InjectedConnector } from "@web3-react/injected-connector";
-
-const provider = new ethers.providers.JsonRpcProvider(
-  "https://rinkeby-light.eth.linkpool.io/"
-);
 
 const doNothing = () => void {};
 export const metamaskConnector = new InjectedConnector({
-  supportedChainIds: [4],
+  supportedChainIds: [4], //rinkeby-testnet
 });
 
 export function useConnector() {
@@ -19,7 +14,6 @@ export function useConnector() {
     account: walletAddress,
   } = useWeb3React();
   const getSigner = () => library?.getSigner();
-  const getProvider = () => provider;
 
   const connectWallet = () => {
     activate(metamaskConnector, undefined, true)
@@ -29,5 +23,5 @@ export function useConnector() {
       });
   };
 
-  return { connectWallet, getSigner, getProvider, isActive, walletAddress };
+  return { connectWallet, getSigner, isActive, walletAddress };
 }

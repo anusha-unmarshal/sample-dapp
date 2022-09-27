@@ -8,7 +8,7 @@ import { BigNumber } from "bignumber.js";
 import { useLoadingIndicatorUpdater } from "./LoadingIndicator";
 
 export const stakerInfoState = atom({
-  key: "Staker_details",
+  key: "STAKER_DETAILS",
   default: {
     balance: new BigNumber(0),
     stakeAmount: new BigNumber(0),
@@ -26,7 +26,7 @@ export const StakerInfoReader = () => {
 };
 
 const rewardsState = atom({
-  key: "Claimable_rewards",
+  key: "CLAIMABLE_REWARDS",
   default: {
     claimableTokens: new BigNumber(0),
     earnedTokens: new BigNumber(0),
@@ -57,36 +57,6 @@ const useStakerDetails = () => {
         balance: hexaToBigNumber(balance, 8),
       }));
     });
-  };
-
-  const handleTransaction = async (transaction, successMessage) => {
-    try {
-      const trx = await transaction();
-      await trx.wait();
-      alert(successMessage);
-    } catch (e) {
-      console.log(e);
-      if (e.code === 4001) {
-        alert("User denied the transaction!");
-        return;
-      }
-      alert("Transaction Failed!");
-    }
-  };
-
-  const stake = async (amount) => {
-    const stakingContract = getStakingContract(getSigner());
-    console.log("Stake", amount);
-    updateLoadingStatus((state) => ({ ...state, isStaking: true }));
-
-    const formattedAmount = ethers.utils.parseUnits(amount.toString(), 8);
-    await handleTransaction(
-      () => stakingContract.stake(formattedAmount),
-      "Stake completed"
-    );
-    updateLoadingStatus((state) => ({ ...state, isStaking: false }));
-    getStakerInfo();
-    getTokenBalance();
   };
 
   const getAllowance = async () => {
@@ -131,6 +101,34 @@ const useStakerDetails = () => {
     });
   };
 
+  const handleTransaction = async (transaction, successMessage) => {
+    try {
+      const trx = await transaction();
+      await trx.wait();
+      alert(successMessage);
+    } catch (e) {
+      if (e.code === 4001) {
+        alert("User denied the transaction!");
+        return;
+      }
+      alert("Transaction Failed!");
+    }
+  };
+
+  const stake = async (amount) => {
+    const stakingContract = getStakingContract(getSigner());
+    updateLoadingStatus((state) => ({ ...state, isStaking: true }));
+
+    const formattedAmount = ethers.utils.parseUnits(amount.toString(), 8);
+    await handleTransaction(
+      () => stakingContract.stake(formattedAmount),
+      "Stake completed"
+    );
+    updateLoadingStatus((state) => ({ ...state, isStaking: false }));
+    getStakerInfo();
+    getTokenBalance();
+  };
+
   const getApproval = async () => {
     const tokenContract = getTokenContract(getSigner());
     const stakingContract = getStakingContract(getSigner());
@@ -159,6 +157,7 @@ const useStakerDetails = () => {
     );
     updateLoadingStatus((state) => ({ ...state, isUnstaking: false }));
     getStakerInfo();
+    getClaimableTokens();
     getTokenBalance();
   }
 

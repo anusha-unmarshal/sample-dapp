@@ -3,19 +3,18 @@ import { stakerInfoState } from "./StakerDetails";
 import { BigNumber } from "bignumber.js";
 
 const allowanceState = atom({
-  key: "allowanceState",
+  key: "ALLOWANCE_STATE",
   default: new BigNumber(0),
 });
 
 const derivedAllowanceState = selector({
-  key: "derivedAllowanceStateV2",
+  key: "DERIVED_ALLOWANCE_STATE",
   get: ({ get }) => {
     const allowanceValue = get(allowanceState);
     const { balance: tokenBalance } = get(stakerInfoState);
     return {
       hasAllowance:
-        allowanceValue.gte(tokenBalance) &&
-        allowanceValue.gte(new BigNumber(0)),
+        allowanceValue.gte(tokenBalance) && allowanceValue.gt(new BigNumber(0)),
       value: allowanceValue,
     };
   },

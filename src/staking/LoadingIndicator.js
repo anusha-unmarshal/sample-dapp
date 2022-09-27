@@ -9,7 +9,7 @@ const DefaultLoadingStatus = {
 };
 
 export const loadingIndicatorState = atom({
-  key: "loadingIndicatorState",
+  key: "LOADING_INDICATOR_STATE",
   default: DefaultLoadingStatus,
 });
 

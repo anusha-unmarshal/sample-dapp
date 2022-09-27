@@ -1,6 +1,7 @@
 import { Web3Provider } from "@ethersproject/providers";
 import { Web3ReactProvider } from "@web3-react/core";
 import { RecoilRoot } from "recoil";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 function getLibrary(provider) {
   const library = new Web3Provider(provider);
@@ -8,11 +9,18 @@ function getLibrary(provider) {
   return library;
 }
 
+const client = new ApolloClient({
+  uri: "https://api.spacex.land/graphql/",
+  cache: new InMemoryCache(),
+});
+
 const Providers = ({ children }) => {
   return (
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <RecoilRoot>{children}</RecoilRoot>
-    </Web3ReactProvider>
+    <ApolloProvider client={client}>
+      <Web3ReactProvider getLibrary={getLibrary}>
+        <RecoilRoot>{children}</RecoilRoot>
+      </Web3ReactProvider>
+    </ApolloProvider>
   );
 };
 

@@ -14,6 +14,7 @@ import useStakerDetails, {
 import { useLoadingIndicatorReader } from "./LoadingIndicator";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { formatBigNumber } from "./Converters";
+import { BigNumber } from "bignumber.js";
 
 const Stake = () => {
   const { stake } = useStakerDetails();
@@ -50,7 +51,7 @@ const Unstake = () => {
   return (
     <>
       <Typography textAlign={"center"}>
-        Staked Amount: {formatBigNumber(stakerInfo.stakeAmount)}
+        Staked Amount: {formatBigNumber(stakerInfo.stakeAmount)} unm
       </Typography>
       <br />
       <LoadingButton
@@ -76,15 +77,16 @@ const Claim = () => {
       </Typography>
       <br />
       <Typography textAlign={"center"}>
-        Total earned: {formatBigNumber(rewardsInfo.earnedTokens, 8)}
+        Total earned: {formatBigNumber(rewardsInfo.earnedTokens, 8)} unm
       </Typography>
       <Typography textAlign={"center"}>
-        Claimable: {formatBigNumber(rewardsInfo.claimableTokens, 8)}
+        Claimable: {formatBigNumber(rewardsInfo.claimableTokens, 8)} unm
       </Typography>
       <br />
       <LoadingButton
         variant={"outlined"}
         fullWidth
+        disabled={rewardsInfo.claimableTokens.eq(new BigNumber(0))}
         onClick={claim}
         loading={loadingIndicator.isClaimingRewards}
       >
