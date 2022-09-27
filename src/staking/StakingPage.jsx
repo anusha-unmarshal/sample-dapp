@@ -7,7 +7,7 @@ import StakeCards from "./StakeCards";
 import { useAllowancesReader } from "./Approval";
 import ApproveCard from "./ApproveCard";
 import { formatBigNumber } from "./Converters";
-// import StakeHistory from "../history/StakeHistory";
+import StakeHistory from "../history/StakeHistory";
 
 const StakingPage = () => {
   const { getTokenBalance, getStakerInfo, getClaimableTokens, getAllowance } =
@@ -53,14 +53,14 @@ const StakingPage = () => {
         </Container>
       </Paper>
       {!hasAllowance ? <ApproveCard /> : <StakeCards />}
-      {/*<Container maxWidth={"lg"} sx={{ p: 3 }}>*/}
-      {/*  <Paper sx={{ p: 3 }}>*/}
-      {/*    <Typography textAlign={"center"} fontSize={"20px"} fontWeight={600}>*/}
-      {/*      Stake History*/}
-      {/*    </Typography>*/}
-      {/*    <StakeHistory />*/}
-      {/*  </Paper>*/}
-      {/*</Container>*/}
+      <Container maxWidth={"lg"} sx={{ p: 3 }}>
+        <Paper sx={{ p: 3 }}>
+          <Typography textAlign={"center"} fontSize={"20px"} fontWeight={600}>
+            Stake History
+          </Typography>
+          <StakeHistory />
+        </Paper>
+      </Container>
     </>
   );
 };
