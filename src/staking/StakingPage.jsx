@@ -52,15 +52,27 @@ const StakingPage = () => {
           </Stack>
         </Container>
       </Paper>
-      {!hasAllowance ? <ApproveCard /> : <StakeCards />}
-      <Container maxWidth={"lg"} sx={{ p: 3 }}>
-        <Paper sx={{ p: 3 }}>
-          <Typography textAlign={"center"} fontSize={"20px"} fontWeight={600}>
-            Stake History
-          </Typography>
-          <StakeHistory />
-        </Paper>
-      </Container>
+      {isActive ? (
+        <>
+          {!hasAllowance ? <ApproveCard /> : <StakeCards />}
+          <Container maxWidth={"lg"} sx={{ p: 3 }}>
+            <Paper sx={{ p: 3 }}>
+              <Typography
+                textAlign={"center"}
+                fontSize={"20px"}
+                fontWeight={600}
+              >
+                Stake History
+              </Typography>
+              <StakeHistory />
+            </Paper>
+          </Container>
+        </>
+      ) : (
+        <Typography textAlign={"center"} fontSize={"20px"} fontWeight={500}>
+          Connect wallet to stake
+        </Typography>
+      )}
     </>
   );
 };

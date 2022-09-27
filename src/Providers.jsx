@@ -10,7 +10,7 @@ function getLibrary(provider) {
 }
 
 const client = new ApolloClient({
-  uri: "https://api.spacex.land/graphql/",
+  uri: "https://dep-w7dbbw2konwrmfhb-graphql.prod.unmarshal.com/stakingcon_kurxy/graphql",
   cache: new InMemoryCache(),
 });
 
