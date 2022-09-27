@@ -7,6 +7,7 @@ import StakeCards from "./StakeCards";
 import { useAllowancesReader } from "./Approval";
 import ApproveCard from "./ApproveCard";
 import { formatBigNumber } from "./Converters";
+// import StakeHistory from "../history/StakeHistory";
 
 const StakingPage = () => {
   const { getTokenBalance, getStakerInfo, getClaimableTokens, getAllowance } =
@@ -45,14 +46,21 @@ const StakingPage = () => {
             <Stack direction={"column"} justifyContent={"flex-end"}>
               <Wallet />
               <Typography textAlign={"right"}>
-                Bal: {formatBigNumber(stakerInfo.balance, 8)}
+                Bal: {formatBigNumber(stakerInfo.balance, 8)} unm
               </Typography>
             </Stack>
           </Stack>
         </Container>
       </Paper>
       {!hasAllowance ? <ApproveCard /> : <StakeCards />}
-      {/*<StakeHistory />*/}
+      {/*<Container maxWidth={"lg"} sx={{ p: 3 }}>*/}
+      {/*  <Paper sx={{ p: 3 }}>*/}
+      {/*    <Typography textAlign={"center"} fontSize={"20px"} fontWeight={600}>*/}
+      {/*      Stake History*/}
+      {/*    </Typography>*/}
+      {/*    <StakeHistory />*/}
+      {/*  </Paper>*/}
+      {/*</Container>*/}
     </>
   );
 };
